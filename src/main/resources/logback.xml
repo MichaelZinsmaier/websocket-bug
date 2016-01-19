@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration debug="false" scan="false">
+
+    <!-- Property Definitions -->
+    <property name="LOG_DIR" value="${LOG_HOME:-/var/log}"/>
+    <!-- under windows check C:/var/log -->
+    <property name="LOG_NAME" value="hackathon.log"/>
+
+    <property name="STAGE" value="Development"/>
+    <property name="TENANT" value="Tenant"/>
+
+    <!-- Set logger context name (defaults to "default") -->
+    <contextName>${TENANT}</contextName>
+
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} %-5level %logger{0} [%thread] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender(s) -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/${LOG_NAME}</file>
+        <encoder>
+            <pattern>%d{ISO8601} %-5level [%thread] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root Logger Configuration -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
+

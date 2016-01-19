@@ -1,0 +1,56 @@
+
+// tasks and dependencies for the actual project
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+
+ext {
+	// Library versions
+    scala = '2.11'
+    scalaVersion = scala + '.7'
+	testNGVersion = '6.9.4'
+	nettyVersion = '4.0.29.Final'
+
+    scalaVersion = '2.11.7'
+    akkaVersion = '2.4.1'
+    akkaStreamVersion = '2.0.2'
+
+	//General Settings
+	skipTests = false
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile group: 'io.netty', name: 'netty-common', version: nettyVersion
+	compile group: 'io.netty', name: 'netty-handler', version: nettyVersion
+	compile group: 'io.netty', name: 'netty-codec-http', version: nettyVersion
+    compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    compile group: 'com.typesafe.akka', name: 'akka-actor_' + scala, version: akkaVersion
+    compile group: 'com.typesafe.akka', name: 'akka-slf4j_' + scala, version: akkaVersion
+    compile group: 'com.typesafe.akka', name: 'akka-stream-experimental_' + scala, version: akkaStreamVersion
+    compile group: 'com.typesafe.akka', name: 'akka-http-core-experimental_' + scala, version: akkaStreamVersion
+    compile group: 'com.typesafe.akka', name: 'akka-http-experimental_' + scala, version: akkaStreamVersion
+
+	testCompile group: 'org.testng', name: 'testng', version: testNGVersion
+}
+
+test {
+	onlyIf {!skipTests}
+	testLogging {
+		exceptionFormat "full"
+		events "passed", "skipped", "failed"
+	}
+}
+
+tasks.withType(Test) {
+    //makes the standard streams (err and out) visible at console when running tests
+    testLogging.showStandardStreams = true
+	
+    useTestNG() {
+		useDefaultListeners = true
+		suites 'src/test/resources/testng-unit.xml'
+	}
+}
