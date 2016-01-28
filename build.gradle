@@ -13,7 +13,7 @@ ext {
 
     scalaVersion = '2.11.7'
     akkaVersion = '2.4.1'
-    akkaStreamVersion = '2.0.1'
+    akkaStreamVersion = '2.0.3'
 
 	//General Settings
 	skipTests = false
@@ -21,9 +21,6 @@ ext {
 
 repositories {
 	mavenCentral()
-	maven {
-		url = 'http://repo.akka.io/snapshots'
-	}
 }
 
 dependencies {
@@ -31,29 +28,12 @@ dependencies {
 	compile group: 'io.netty', name: 'netty-handler', version: nettyVersion
 	compile group: 'io.netty', name: 'netty-codec-http', version: nettyVersion
     compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
-
-    compile ('com.typesafe.akka:akka-actor_2.11:2.4-SNAPSHOT') {
-        changing true
-    }
-    compile ('com.typesafe.akka:akka-stream-experimental_2.11:2.4-SNAPSHOT') {
-        changing true
-    }
-    compile ('com.typesafe.akka:akka-http-core-experimental_2.11:2.4-SNAPSHOT') {
-        changing true
-        exclude module: 'akka-parsing-experimental_2.11'
-    }
-    compile ('com.typesafe.akka:akka-http-experimental_2.11:2.4-SNAPSHOT') {
-        changing true
-        exclude module: 'akka-parsing-experimental_2.11'
-    }
-    compile ('com.typesafe.akka:akka-parsing-experimental_2.11:2.0.2')
+    compile group: 'com.typesafe.akka', name: 'akka-actor_' + scala, version: akkaVersion
+    compile group: 'com.typesafe.akka', name: 'akka-stream-experimental_' + scala, version: akkaStreamVersion
+    compile group: 'com.typesafe.akka', name: 'akka-http-core-experimental_' + scala, version: akkaStreamVersion
+    compile group: 'com.typesafe.akka', name: 'akka-http-experimental_' + scala, version: akkaStreamVersion
 
 	testCompile group: 'org.testng', name: 'testng', version: testNGVersion
-}
-
-configurations.all {
-	// check for updates every build
-	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 test {
