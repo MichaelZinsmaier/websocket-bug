@@ -5,7 +5,7 @@ package server
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpMethods.GET
-import akka.http.scaladsl.model.ws.{Message, UpgradeToWebsocket}
+import akka.http.scaladsl.model.ws.{UpgradeToWebSocket, Message}
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, Uri}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Flow
@@ -28,8 +28,8 @@ object TestEchoServerApp extends App {
   // asynchronous broken since 2.0.2
   val requestHandler: HttpRequest => Future[HttpResponse] = {
     case req@HttpRequest(GET, Uri.Path("/my-client"), _, _, _) =>
-      req.header[UpgradeToWebsocket] match {
-        case Some(upgrade: UpgradeToWebsocket) => {
+      req.header[UpgradeToWebSocket] match {
+        case Some(upgrade) => {
           Future(upgrade.handleMessages(identityFlow))
         }
         case None => Future(HttpResponse(404))
